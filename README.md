@@ -1,2 +1,5 @@
 # cpts_322_project
-cpts 322
+
+Project name: RegBasic
+
+Framework: C#
