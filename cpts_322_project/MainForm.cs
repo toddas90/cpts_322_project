@@ -1,57 +1,77 @@
 using System;
 using Eto.Forms;
 using Eto.Drawing;
+using System.Text.RegularExpressions;
 
 namespace cpts_322_project
 {
-	public partial class MainForm : Form
-	{
-		public MainForm()
-		{
-			Title = "My Eto Form";
-			MinimumSize = new Size(200, 200);
+    public partial class MainForm : Form
+    {
+        public event EventHandler<EventArgs> Click;
+        public MainForm()
+        {
+            Title = "RegBasic";
+            MinimumSize = new Size(800, 800);
 
-			Content = new StackLayout
-			{
-				Padding = 10,
-				Items =
-				{
-					"Hello World!",
-					// add more controls here
+            TextBox regex = new TextBox
+            {
+                PlaceholderText = "Enter Regex"
+            };
+            TextBox userString = new TextBox
+            {
+                PlaceholderText = "Enter String"
+            }; 
+            Button checkRegex = new Button
+            {
+                Text = "Evaluate"
+            };
+			CheckBox match = new CheckBox();
+			
+            Content = new StackLayout
+            {
+                Padding = 10,
+                Items =
+                {
+                    userString,
+					regex,
+                    checkRegex,
+					match,
 				}
-			};
+            };
 
-			// create a few commands that can be used for the menu and toolbar
-			var clickMe = new Command { MenuText = "Click Me!", ToolBarText = "Click Me!" };
-			clickMe.Executed += (sender, e) => MessageBox.Show(this, "I was clicked!");
+            // create a few commands that can be used for the menu and toolbar
+            var quitCommand = new Command { MenuText = "Quit", Shortcut = Application.Instance.CommonModifier | Keys.Q };
+            quitCommand.Executed += (sender, e) => Application.Instance.Quit();
 
-			var quitCommand = new Command { MenuText = "Quit", Shortcut = Application.Instance.CommonModifier | Keys.Q };
-			quitCommand.Executed += (sender, e) => Application.Instance.Quit();
+            var aboutCommand = new Command { MenuText = "About..." };
+            aboutCommand.Executed += (sender, e) => new AboutDialog().ShowDialog(this);
 
-			var aboutCommand = new Command { MenuText = "About..." };
-			aboutCommand.Executed += (sender, e) => new AboutDialog().ShowDialog(this);
+            checkRegex.Click += new EventHandler<EventArgs>((args, sender) => {
+				var r = new Regex(regex.Text);
+				var s = userString.Text;
+				if (r.IsMatch(s)) {
+					match.Checked = true;
+				} else {
+					match.Checked = false;
+				}
+			});
 
-			// create menu
-			Menu = new MenuBar
-			{
-				Items =
-				{
+            // create menu
+            Menu = new MenuBar
+            {
+                Items =
+                {
 					// File submenu
-					new ButtonMenuItem { Text = "&File", Items = { clickMe } },
+					new ButtonMenuItem { Text = "&File", Items = { } },
 					// new ButtonMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
 					// new ButtonMenuItem { Text = "&View", Items = { /* commands/items */ } },
 				},
-				ApplicationItems =
-				{
-					// application (OS X) or file menu (others)
-					new ButtonMenuItem { Text = "&Preferences..." },
-				},
-				QuitItem = quitCommand,
-				AboutItem = aboutCommand
-			};
+            
+                QuitItem = quitCommand,
+                AboutItem = aboutCommand
+            };
 
-			// create toolbar			
-			ToolBar = new ToolBar { Items = { clickMe } };
-		}
-	}
+        }
+
+    }
 }
