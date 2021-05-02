@@ -1,7 +1,13 @@
 # cpts_322_project
 
+Project Authors:
+Nicholas Lersey
+Charles Norden
+Pavel Braginskiy
+Pierce Cappa
+Jean Cho
+Andrew Todd
+
 Project name: RegBasic
 
 Framework: C#
-
-Project files MainForm.cs and ConvertToRegex all work, all other files may not

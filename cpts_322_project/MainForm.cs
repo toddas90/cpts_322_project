@@ -15,8 +15,8 @@ namespace cpts_322_project
             Title = "RegBasic";
             MinimumSize = new Size(800, 800);
 
-            dropData.Add("C# Regex");
-            dropData.Add("Test");
+            dropData.Add(ConvertToRegex.NetRegex);
+            dropData.Add(ConvertToRegex.PcreRegex);
 
             TextBox regex = new TextBox
             {
@@ -32,9 +32,9 @@ namespace cpts_322_project
             {
                 Text = "Evaluate"
             };
-			CheckBox match = new CheckBox
-			{
-			};
+			Label match = new Label {
+                Text = "",
+            };
             DropDown flavors = new DropDown();
 
             flavors.DataStore = dropData;
@@ -61,20 +61,17 @@ namespace cpts_322_project
             aboutCommand.Executed += (sender, e) => new AboutDialog().ShowDialog(this);
 
             checkRegex.Click += new EventHandler<EventArgs>((args, sender) => {
-                ConvertToRegex reg = new ConvertToRegex(regex.Text);
+                ConvertToRegex reg = new ConvertToRegex(regex.Text, flavors.SelectedValue.ToString());
                 var r = reg.getRegex();
 				var s = userString.Text;
-				if (r.IsMatch(s)) {
-					match.Checked = true;
+				if (r.MatchesString(s)) {
+					match.Text = "Matches";
+                    match.TextColor = Color.FromArgb(0, 100, 0);
 				} else {
-					match.Checked = false;
+					match.Text = "Does not match";
+                    match.TextColor = Color.FromArgb(255, 0, 0);
 				}
 			});
-
-            flavors.SelectedIndexChanged += new EventHandler<EventArgs>((args, sender) => {
-                // Dropdown Click event goes here
-                // Could maybe use a different event, I just picked SelectedIndex just because
-            });
 
             // create menu
             Menu = new MenuBar
