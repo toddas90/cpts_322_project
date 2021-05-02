@@ -15,17 +15,21 @@ namespace cpts_322_project
 
             TextBox regex = new TextBox
             {
-                PlaceholderText = "Enter Regex"
+                PlaceholderText = "Enter Regex",
+                Size = new Size(780, -1),
             };
             TextBox userString = new TextBox
             {
-                PlaceholderText = "Enter String"
-            }; 
+                PlaceholderText = "Enter String",
+                Size = new Size(780, -1),
+            };
             Button checkRegex = new Button
             {
                 Text = "Evaluate"
             };
-			CheckBox match = new CheckBox();
+			CheckBox match = new CheckBox
+			{
+			};
 			
             Content = new StackLayout
             {
