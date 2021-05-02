@@ -8,20 +8,25 @@ namespace cpts_322_project
     public partial class MainForm : Form
     {
         public event EventHandler<EventArgs> Click;
+        DataStoreCollection<String> dropData = new DataStoreCollection<String>();
+
         public MainForm()
         {
             Title = "RegBasic";
             MinimumSize = new Size(800, 800);
 
+            dropData.Add("C# Regex");
+            dropData.Add("Test");
+
             TextBox regex = new TextBox
             {
                 PlaceholderText = "Enter Regex",
-                Size = new Size(780, -1),
+                Size = new Size(780, 100),
             };
             TextBox userString = new TextBox
             {
                 PlaceholderText = "Enter String",
-                Size = new Size(780, -1),
+                Size = new Size(780, 100),
             };
             Button checkRegex = new Button
             {
@@ -30,12 +35,17 @@ namespace cpts_322_project
 			CheckBox match = new CheckBox
 			{
 			};
+            DropDown flavors = new DropDown();
+
+            flavors.DataStore = dropData;
+            flavors.SelectedIndex = 0;
 			
             Content = new StackLayout
             {
                 Padding = 10,
                 Items =
                 {
+                    flavors,
                     userString,
 					regex,
                     checkRegex,
@@ -51,7 +61,8 @@ namespace cpts_322_project
             aboutCommand.Executed += (sender, e) => new AboutDialog().ShowDialog(this);
 
             checkRegex.Click += new EventHandler<EventArgs>((args, sender) => {
-				var r = new Regex(regex.Text);
+                ConvertToRegex reg = new ConvertToRegex(regex.Text);
+                var r = reg.getRegex();
 				var s = userString.Text;
 				if (r.IsMatch(s)) {
 					match.Checked = true;
@@ -59,6 +70,11 @@ namespace cpts_322_project
 					match.Checked = false;
 				}
 			});
+
+            flavors.SelectedIndexChanged += new EventHandler<EventArgs>((args, sender) => {
+                // Dropdown Click event goes here
+                // Could maybe use a different event, I just picked SelectedIndex just because
+            });
 
             // create menu
             Menu = new MenuBar
